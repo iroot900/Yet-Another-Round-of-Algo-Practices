@@ -1,6 +1,15 @@
 import java.util.*;
 
 public class Solution {
+
+
+	//map
+	//set  for 1 can we go to 2.   (1,2) yes. go.  can we go to 3, (2,3) yes or no?
+	//           can we go to -1, yes.  the update longest. 
+	//
+	//            after this...,  all those are visited. try next. 
+	//             O(n), n is paris.
+	//
 	static int longest(int[][] edges) {
 		int longest = 0;
 		//ok graph what do we do?!
