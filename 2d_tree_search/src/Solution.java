@@ -39,6 +39,13 @@ public class Solution {
 
 		int[] test4 = tree.closePoint(100, 100);
 		print(test4);
+
+		System.out.println(tree.rangeSearch(4, 1, 9 ,14));
+
+		System.out.println(tree.rangeSearch(2, 6, 6 ,17));
+
+		System.out.println(tree.rangeSearch(100, 10, 200 ,200));
+		System.out.println(tree.rangeSearch(0, 0, 20 ,20));
 	}
 
 	static private <T> void print(int[] arr) {
@@ -119,7 +126,33 @@ class dTree {
 	}
 
 	int rangeSearch(int x1, int y1, int x2, int y2) {
-		return -1;
+		return rangeSearch(root, x1, y1, x2, y2, 0);
+	}
+
+	private int rangeSearch(Node node, int x1, int y1, int x2, int y2, int depth) {
+		if (node == null) return 0;
+
+		//if current in it.
+		// then range. go both or just one?
+
+		int count = 0;
+		int x = node.x; int y = node.y;
+		if (x >= x1 && x <= x2 && y >= y1 && y <= y2) count = 1;
+
+		boolean odd = ((depth & 1) == 1); 
+		if (odd) {   // x left right
+			if (x1 <= x) 
+				count += rangeSearch(node.leftUp, x1, y1, x2, y2, depth + 1);
+			if (x2 >= x) 
+				count += rangeSearch(node.rightDown, x1, y1, x2, y2, depth + 1);
+		} else { // y up and down
+			if (y1 <= y) 
+				count += rangeSearch(node.leftUp, x1, y1, x2, y2, depth + 1);
+			if (y2 >= y) 
+				count += rangeSearch(node.rightDown, x1, y1, x2, y2, depth + 1);
+		}
+
+		return count;
 	}
 
 	int[] closePoint(int x, int y) { //the close point for (x, y)
@@ -134,7 +167,7 @@ class dTree {
 		return ret;
 	}
 
-	void closePoint(Node node, int x, int y, int[] point, int dist[], int depth, int[] closeP) {
+	private void closePoint(Node node, int x, int y, int[] point, int dist[], int depth, int[] closeP) {
 		if (node == null) return;
 		if (node.x == x && node.y == y) { closeP[0] = x; closeP[1] = y; dist[0] = 0; return;}
 
