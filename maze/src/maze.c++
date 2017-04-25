@@ -6,14 +6,37 @@ using namespace std;
 
 const int neibs[4][2] = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
 
+
+//give a post. i want to know ok
+//
+//
+
+
+//pos[i]
+//
+//  go to    0	 	1	 	2	 3 
+//			 left	right  down  up
+// 0, 1
+// 2 3
+
+int neibWall(int dir) {
+	switch(dir) {
+		case 0 : return 1;
+		case 1 : return 0;
+		case 2 : return 3;
+		case 3 : return 2;
+	}
+	return -1;
+}
+
 void mazeGen(int w, int l, vector<vector<vector<int>>>& maze, int x, int y) {
-	int index  = 0;
 	///cout << x << " " << y << " : " << endl;
 	//randomly choose one
 	
 	vector<int> pos = {0, 1,2, 3};
 	shuffle(pos.begin(), pos.end(), std::default_random_engine(time(0)));
 
+	int index  = 0;
 	for (int i = 0; i < pos.size(); ++i) {
 
 		auto neib = neibs[pos[i]];
@@ -28,7 +51,9 @@ void mazeGen(int w, int l, vector<vector<vector<int>>>& maze, int x, int y) {
 		if (xx < 0 || yy < 0 || xx >= w || yy >= l || maze[xx][yy][4] == 0) {
 			//cout << "what " << endl;
 		} else {
-			maze[x][y][index] = 0; //remove wall
+			maze[x][y][pos[i]] = 0; //remove wall
+			maze[xx][yy][neibWall(pos[i])] = 0;
+            
 			maze[xx][yy][4] = 0; //visited
 			mazeGen(w, l, maze, xx, yy);
 		}
